@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MyMediaRecord</string>
+    <string name="start_record">开始录制音频</string>
+    <string name="stop_record">停止录制音频</string>
+    <string name="check_audio_list">查看列表</string>
+    <string name="plya_audio">播放</string>
+</resources>
