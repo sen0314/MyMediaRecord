@@ -21,7 +21,6 @@
             </intent-filter>
         </activity>
 
-        <!--<activity android:name=".activity.BaseActivity"></activity>-->
         <service android:name=".RecordingService"/>
     </application>
 
