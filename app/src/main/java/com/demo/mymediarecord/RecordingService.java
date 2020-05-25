@@ -10,10 +10,15 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimerTask;
 
+/**
+ * 录音的 Service
+ */
 public class RecordingService extends Service {
 
     private static final String TAG = "RecordingService";
@@ -84,11 +89,12 @@ public class RecordingService extends Service {
     public void setFileNameAndPath() {
         Log.d(TAG, "setFileNameAndPath === 设置保存路径");
         mFileName = DateFormat.format("yyyyMMdd_HHmmss", Calendar.getInstance(Locale.CHINA)) + ".m4a";
-        File saveDir = new File(Environment.getExternalStorageDirectory() + "/audiokit/");
+        // 应为 caseId 命名的文件夹
+        String audioSaveDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/audiokit/";
+        File saveDir = new File(audioSaveDir);
         if (!saveDir.exists()) {
             saveDir.mkdirs();
         }
-        String audioSaveDir = Environment.getExternalStorageDirectory() + "/audiokit/";
         mFilePath = audioSaveDir + mFileName;
     }
 
@@ -102,6 +108,7 @@ public class RecordingService extends Service {
             getSharedPreferences("sp_name_audio", MODE_PRIVATE)
                     .edit()
                     .putString("audio_path", mFilePath)
+                    .putString("audio_name", mFileName)
                     .putLong("elpased", mElapsedMillis)
                     .apply();
 

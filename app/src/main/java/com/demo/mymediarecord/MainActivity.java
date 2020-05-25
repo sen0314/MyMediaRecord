@@ -46,12 +46,19 @@ public class MainActivity extends AppCompatActivity {
                 RecordingItem recordingItem = new RecordingItem();
                 SharedPreferences sharePreferences = getSharedPreferences("sp_name_audio", MODE_PRIVATE);
                 final String filePath = sharePreferences.getString("audio_path", "");
+                final String fileName = sharePreferences.getString("audio_name","");
                 long elpased = sharePreferences.getLong("elpased", 0);
                 recordingItem.setFilePath(filePath);
+                recordingItem.setName(fileName);
                 recordingItem.setLength((int) elpased);
-                PlaybackDialogFragment fragmentPlay = PlaybackDialogFragment.newInstance(recordingItem);
+                final PlaybackDialogFragment fragmentPlay = PlaybackDialogFragment.newInstance(recordingItem);
                 fragmentPlay.show(getSupportFragmentManager(), PlaybackDialogFragment.class.getSimpleName());
-
+                fragmentPlay.setOnCancelListener(new PlaybackDialogFragment.OnAudioCancelListener() {
+                    @Override
+                    public void onCancel() {
+                        fragmentPlay.dismiss();
+                    }
+                });
             }
         });
 

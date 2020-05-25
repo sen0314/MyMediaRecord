@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -21,6 +22,9 @@ import com.melnykov.fab.FloatingActionButton;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 播放录音的 DialogFragment
+ */
 public class PlaybackDialogFragment extends DialogFragment {
 
     private static final String TAG = "PlaybackFragment";
@@ -37,6 +41,7 @@ public class PlaybackDialogFragment extends DialogFragment {
     private TextView mCurrentProgressTextView = null;
     private TextView mFileNameTextView = null;
     private TextView mFileLengthTextView = null;
+    private ImageView mIvClose = null;
 
     //stores whether or not the mediaplayer is currently playing audio
     private boolean isPlaying = false;
@@ -45,6 +50,8 @@ public class PlaybackDialogFragment extends DialogFragment {
     long minutes = 0;
     long seconds = 0;
     private static long mFileLength = 0;
+
+    private PlaybackDialogFragment.OnAudioCancelListener mListener;
 
     public static PlaybackDialogFragment newInstance (RecordingItem item) {
         PlaybackDialogFragment playbackDialogFragment = new PlaybackDialogFragment();
@@ -79,14 +86,21 @@ public class PlaybackDialogFragment extends DialogFragment {
         Log.d(TAG, "onCreateDialog ==== ");
         Dialog dialog = super.onCreateDialog(savedInstanceState);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_media_playback, null);
 
         mFileNameTextView = (TextView) view.findViewById(R.id.file_name_text_view);
         mFileLengthTextView = (TextView) view.findViewById(R.id.file_length_text_view);
         mCurrentProgressTextView = (TextView) view.findViewById(R.id.current_progress_text_view);
 
-
+        mIvClose = (ImageView) view.findViewById(R.id.play_audio_iv_close);
+        mIvClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "mListener.onCancel()");
+                mListener.onCancel();
+            }
+        });
 
         mSeekBar = (SeekBar) view.findViewById(R.id.seekbar);
         ColorFilter filter = new LightingColorFilter(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorPrimary));
@@ -104,7 +118,7 @@ public class PlaybackDialogFragment extends DialogFragment {
                     long minutes = TimeUnit.MILLISECONDS.toMinutes(mMediaPlayer.getCurrentPosition());
                     long seconds = TimeUnit.MILLISECONDS.toSeconds(mMediaPlayer.getCurrentPosition())
                             - TimeUnit.MINUTES.toSeconds(minutes);
-                    mCurrentProgressTextView.setText(String.format("%02d:%02d", minutes,seconds));
+                    mCurrentProgressTextView.setText(String.format("%02d:%02d", minutes, seconds));
 
                     updateSeekBar();
 
@@ -149,12 +163,13 @@ public class PlaybackDialogFragment extends DialogFragment {
         });
 
         mFileNameTextView.setText(item.getName());
-        mFileLengthTextView.setText(String.format("%02d:%02d", minutes,seconds));
+        mFileLengthTextView.setText(String.format("%02d:%02d", minutes, seconds));
 
         builder.setView(view);
 
         // request a window without the title
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        setCancelable(false); // 设置点击空白处不关闭dialog
 
         return builder.create();
     }
@@ -329,5 +344,14 @@ public class PlaybackDialogFragment extends DialogFragment {
     private void updateSeekBar() {
         Log.d(TAG, "updateSeekBar ==== ");
         mHandler.postDelayed(mRunnable, 1000);
+    }
+
+    public void setOnCancelListener(PlaybackDialogFragment.OnAudioCancelListener listener) {
+        Log.d(TAG, "setOnCancelListener ==== ");
+        this.mListener = listener;
+    }
+
+    public interface OnAudioCancelListener {
+        void onCancel();
     }
 }

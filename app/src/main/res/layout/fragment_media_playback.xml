@@ -16,7 +16,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="7dp">
+            android:layout_margin="7dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp">
+
+            <ImageView
+                android:id="@+id/play_audio_iv_close"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="right"
+                android:layout_marginRight="7dp"
+                android:src="@drawable/ic_close"/>
 
             <TextView
                 android:id="@+id/file_name_text_view"
@@ -27,7 +37,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="7dp"
-                android:layout_marginBottom="7dp"/>
+                android:layout_marginBottom="10dp"/>
 
             <SeekBar
                 android:id="@+id/seekbar"

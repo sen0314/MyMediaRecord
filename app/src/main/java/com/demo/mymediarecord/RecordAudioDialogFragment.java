@@ -18,6 +18,9 @@ import android.widget.Toast;
 
 import com.melnykov.fab.FloatingActionButton;
 
+/**
+ * 开始录音的 DialogFragment
+ */
 public class RecordAudioDialogFragment extends DialogFragment {
 
     private static final String TAG = "RecordAudioDialogFragme";
@@ -56,6 +59,7 @@ public class RecordAudioDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreateDialog ====== ");
         Dialog dialog = super.onCreateDialog(savedInstanceState);
+
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_record_audio, null);
 
@@ -82,8 +86,10 @@ public class RecordAudioDialogFragment extends DialogFragment {
             }
         });
 
-        builder.setCancelable(false);
+        setCancelable(false); // 设置点击空白处不关闭dialog
+//        builder.setCancelable(false); // 设置点击空白处不关闭dialog（无效）
         builder.setView(view);
+
         return builder.create();
     }
 

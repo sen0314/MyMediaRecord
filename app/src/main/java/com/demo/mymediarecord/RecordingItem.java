@@ -4,6 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+/**
+ * 录音文件的实体类
+ */
 public class RecordingItem implements Parcelable {
 
     private static final String TAG = "RecordingItem";
