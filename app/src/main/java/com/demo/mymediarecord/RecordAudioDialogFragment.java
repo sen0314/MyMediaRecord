@@ -81,8 +81,11 @@ public class RecordAudioDialogFragment extends DialogFragment {
         mIvClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "mListener.onCancel()");
-                mListener.onCancel();
+                if (mStartRecording) {
+                    Toast.makeText(getActivity(), "音频正在录制中，请先停止录制...", Toast.LENGTH_LONG).show();
+                } else {
+                    mListener.onCancel();
+                }
             }
         });
 
